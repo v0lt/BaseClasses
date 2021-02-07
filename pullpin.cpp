@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 
 
-#include <streams.h>
+#include "streams.h"
 #include "pullpin.h"
 
 #ifdef DXMPERF
@@ -302,7 +302,7 @@ CPullPin::StopThread()
 DWORD
 CPullPin::ThreadProc(void)
 {
-    while(1) {
+    for (;;) {
 	DWORD cmd = GetRequest();
 	switch(cmd) {
 	case TM_Exit:
@@ -570,7 +570,7 @@ CPullPin::Process(void)
 void
 CPullPin::CleanupCancelled(void)
 {
-    while (1) {
+    for (;;) {
 	IMediaSample * pSample;
 	DWORD_PTR dwUnused;
 
@@ -578,6 +578,7 @@ CPullPin::CleanupCancelled(void)
 			    0,          // no wait
 			    &pSample,
 			    &dwUnused);
+	UNREFERENCED_PARAMETER(hr);
 	if(pSample) {
 	    pSample->Release();
 	} else {

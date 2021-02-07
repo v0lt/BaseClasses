@@ -7,7 +7,7 @@
 //------------------------------------------------------------------------------
 
 
-#include <streams.h>
+#include "streams.h"
 
 // Constructor for the base property page class. As described in the header
 // file we must be initialised with dialog and title resource identifiers.
@@ -54,6 +54,7 @@ STDMETHODIMP_(ULONG) CBasePropertyPage::NonDelegatingAddRef()
 {
     LONG lRef = InterlockedIncrement(&m_cRef);
     ASSERT(lRef > 0);
+	UNREFERENCED_PARAMETER(lRef);
     return max(ULONG(m_cRef),1ul);
 }
 
@@ -136,7 +137,7 @@ INT_PTR CALLBACK CBasePropertyPage::DialogProc(HWND hwnd,
 
         case WM_INITDIALOG:
 
-            _SetWindowLongPtr(hwnd, DWLP_USER, lParam);
+            SetWindowLongPtr(hwnd, DWLP_USER, lParam);
 
             // This pointer may be NULL when calculating size
 
@@ -149,7 +150,7 @@ INT_PTR CALLBACK CBasePropertyPage::DialogProc(HWND hwnd,
 
     // This pointer may be NULL when calculating size
 
-    pPropertyPage = _GetWindowLongPtr<CBasePropertyPage*>(hwnd, DWLP_USER);
+    pPropertyPage = (CBasePropertyPage *) GetWindowLongPtr(hwnd, DWLP_USER);
     if (pPropertyPage == NULL) {
         return (LRESULT) 1;
     }
@@ -363,7 +364,7 @@ INT_PTR CBasePropertyPage::OnReceiveMessage(HWND hwnd,UINT uMsg,WPARAM wParam,LP
 
     CBasePropertyPage *pPropertyPage;
     {
-        pPropertyPage = _GetWindowLongPtr<CBasePropertyPage*>(hwnd, DWLP_USER);
+        pPropertyPage = (CBasePropertyPage *) GetWindowLongPtr(hwnd, DWLP_USER);
 
         if (pPropertyPage->m_hwnd == NULL) {
             return 0;

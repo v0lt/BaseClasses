@@ -7,7 +7,7 @@
 //------------------------------------------------------------------------------
 
 
-#include <streams.h>
+#include "streams.h"
 
 // DbgLog values (all on LOG_TIMING):
 //
@@ -117,24 +117,28 @@ HRESULT CAMSchedule::Unadvise(DWORD_PTR dwAdviseCookie)
     CAdvisePacket * p_prev = &head;
     CAdvisePacket * p_n;
     m_Serialize.Lock();
-    while ( p_n = p_prev->Next() ) // The Next() method returns NULL when it hits z
+    p_n = p_prev->Next();
+    while ( p_n ) // The Next() method returns NULL when it hits z
     {
         if ( p_n->m_dwAdviseCookie == dwAdviseCookie )
         {
             Delete( p_prev->RemoveNext() );
             --m_dwAdviseCount;
             hr = S_OK;
-	    // Having found one cookie that matches, there should be no more
-            #ifdef DEBUG
-	       while (p_n = p_prev->Next())
-               {
-                   ASSERT(p_n->m_dwAdviseCookie != dwAdviseCookie);
-                   p_prev = p_n;
-               }
-            #endif
+			// Having found one cookie that matches, there should be no more
+#ifdef _DEBUG
+			p_n = p_prev->Next();
+			while (p_n)
+			{
+				ASSERT(p_n->m_dwAdviseCookie != dwAdviseCookie);
+				p_prev = p_n;
+				p_n = p_prev->Next();
+			}
+#endif
             break;
         }
         p_prev = p_n;
+		p_n = p_prev->Next();
     };
     m_Serialize.Unlock();
     return hr;
@@ -150,7 +154,7 @@ REFERENCE_TIME CAMSchedule::Advise( const REFERENCE_TIME & rtTime )
 
     CAutoLock lck(&m_Serialize);
 
-    #ifdef DEBUG
+    #ifdef _DEBUG
         if (DbgCheckModuleLevel(LOG_TIMING, 4)) DumpLinkedList();
     #endif
 
@@ -254,7 +258,7 @@ void CAMSchedule::ShuntHead()
         head.m_next = pPacket->m_next;
         (p_prev->m_next = pPacket)->m_next = p_n;
     }
-    #ifdef DEBUG
+    #ifdef _DEBUG
         DbgLog((LOG_TIMING, 2, TEXT("Periodic advise %lu, shunted to %lu"),
     	    pPacket->m_dwAdviseCookie, (pPacket->m_rtEventTime / (UNITS / MILLISECONDS)) ));
     #endif
@@ -262,7 +266,7 @@ void CAMSchedule::ShuntHead()
 }
 
 
-#ifdef DEBUG
+#ifdef _DEBUG
 void CAMSchedule::DumpLinkedList()
 {
     m_Serialize.Lock();

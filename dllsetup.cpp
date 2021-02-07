@@ -7,7 +7,7 @@
 //------------------------------------------------------------------------------
 
 
-#include <streams.h>
+#include "streams.h"
 #include <strsafe.h>
 
 //---------------------------------------------------------------------------
@@ -126,6 +126,7 @@ AMovieSetupRegisterServer( CLSID   clsServer
                               , szCLSID
                               , CHARS_IN_GUID );
   ASSERT( SUCCEEDED(hr) );
+  UNREFERENCED_PARAMETER(hr);
 
   // create key
   //
@@ -259,6 +260,7 @@ AMovieSetupRegisterFilter2( const AMOVIESETUP_FILTER * const psetupdata
   //
   if( NULL == psetupdata ) return S_FALSE;
 
+  const CLSID *filterCategory = &psetupdata->filterCategory;
 
   // unregister filter
   // (as pins are subkeys of filter's CLSID key
@@ -266,7 +268,7 @@ AMovieSetupRegisterFilter2( const AMOVIESETUP_FILTER * const psetupdata
   //
   DbgLog((LOG_TRACE, 3, TEXT("= = unregister filter")));
   HRESULT hr = pIFM2->UnregisterFilter(
-      0,                        // default category
+      filterCategory,           // category
       0,                        // default instance name
       *psetupdata->clsID );
 
@@ -285,7 +287,7 @@ AMovieSetupRegisterFilter2( const AMOVIESETUP_FILTER * const psetupdata
     hr = pIFM2->RegisterFilter(*psetupdata->clsID
                              , psetupdata->strName
                              , 0 // moniker
-                             , 0 // category
+                             , filterCategory // category
                              , NULL // instance
                              , &rf2);
   }

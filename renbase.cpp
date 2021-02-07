@@ -7,10 +7,10 @@
 //------------------------------------------------------------------------------
 
 
-#include <streams.h>        // DirectShow base class definitions
+#include "streams.h"        // DirectShow base class definitions
 #include <mmsystem.h>       // Needed for definition of timeGetTime
 #include <limits.h>         // Standard data type limit definitions
-#include <measure.h>        // Used for time critical log functions
+#include "measure.h"        // Used for time critical log functions
 
 #pragma warning(disable:4355)
 
@@ -163,7 +163,7 @@ HRESULT CBaseRenderer::SourceThreadCanWait(BOOL bCanWait)
 }
 
 
-#ifdef DEBUG
+#ifdef _DEBUG
 // Dump the current renderer state to the debug terminal. The hardest part of
 // the renderer is the window where we unlock everything to wait for a clock
 // to signal it is time to draw or for the application to cancel everything
@@ -262,7 +262,7 @@ HRESULT CBaseRenderer::WaitForRenderTime()
     while (Result == WAIT_TIMEOUT) {
         Result = WaitForMultipleObjects(2,WaitObjects,FALSE,RENDER_TIMEOUT);
 
-#ifdef DEBUG
+#ifdef _DEBUG
         if (Result == WAIT_TIMEOUT) DisplayRendererState();
 #endif
 

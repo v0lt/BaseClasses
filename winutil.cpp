@@ -7,11 +7,11 @@
 //------------------------------------------------------------------------------
 
 
-#include <streams.h>
+#include "streams.h"
 #include <limits.h>
 #include <dvdmedia.h>
 #include <strsafe.h>
-#include <checkbmi.h>
+#include "checkbmi.h"
 
 static UINT MsgDestroy;
 
@@ -31,7 +31,7 @@ CBaseWindow::CBaseWindow(BOOL bDoGetDC, bool bDoPostToDestroy) :
     m_MemoryDC(NULL),
     m_hPalette(NULL),
     m_bBackground(FALSE),
-#ifdef DEBUG
+#ifdef _DEBUG
     m_bRealizing(FALSE),
 #endif
     m_bNoRealize(FALSE),
@@ -94,7 +94,7 @@ HRESULT CBaseWindow::PrepareWindow()
 // Derived classes MUST call DoneWithWindow in their destructors so
 // that no messages arrive after the derived class constructor ends
 
-#ifdef DEBUG
+#ifdef _DEBUG
 CBaseWindow::~CBaseWindow()
 {
     ASSERT(m_hwnd == NULL);
@@ -425,7 +425,7 @@ LRESULT CALLBACK WndProc(HWND hwnd,         // Window handle
     // structure.  IF we get any messages before WM_NCCREATE we will
     // pass them to DefWindowProc.
 
-    CBaseWindow *pBaseWindow = _GetWindowLongPtr<CBaseWindow*>(hwnd,0);
+    CBaseWindow *pBaseWindow = (CBaseWindow *)GetWindowLongPtr(hwnd,0);
 
     if (pBaseWindow == NULL) {
 
@@ -449,14 +449,17 @@ LRESULT CALLBACK WndProc(HWND hwnd,         // Window handle
         }
 
         // Set the window LONG to be the object who created us
-#ifdef DEBUG
+#ifdef _DEBUG
         SetLastError(0);  // because of the way SetWindowLong works
 #endif
 
-        LONG_PTR rc = _SetWindowLongPtr(hwnd, (DWORD) 0, pBaseWindow);
+#ifdef _DEBUG
+        LONG_PTR rc =
+#endif
+			SetWindowLongPtr(hwnd, (DWORD) 0, (LONG_PTR)pBaseWindow);
 
 
-#ifdef DEBUG
+#ifdef _DEBUG
         if (0 == rc) {
             // SetWindowLong MIGHT have failed.  (Read the docs which admit
             // that it is awkward to work out if you have had an error.)
@@ -556,8 +559,10 @@ HRESULT CBaseWindow::InitialiseWindow(HWND hwnd)
 
     if (m_bDoGetDC)
     {
-        EXECUTE_ASSERT(m_hdc = GetDC(hwnd));
-        EXECUTE_ASSERT(m_MemoryDC = CreateCompatibleDC(m_hdc));
+		m_hdc = GetDC(hwnd);
+        EXECUTE_ASSERT(m_hdc);
+		m_MemoryDC = CreateCompatibleDC(m_hdc);
+        EXECUTE_ASSERT(m_MemoryDC);
 
         EXECUTE_ASSERT(SetStretchBltMode(m_hdc,COLORONCOLOR));
         EXECUTE_ASSERT(SetStretchBltMode(m_MemoryDC,COLORONCOLOR));
@@ -650,7 +655,7 @@ HRESULT CBaseWindow::DoCreateWindow()
 
 // The base class provides some default handling and calls DefWindowProc
 
-LRESULT CBaseWindow::OnReceiveMessage(HWND hwnd,         // Window handle
+INT_PTR CBaseWindow::OnReceiveMessage(HWND hwnd,         // Window handle
                                       UINT uMsg,         // Message ID
                                       WPARAM wParam,     // First parameter
                                       LPARAM lParam)     // Other parameter
@@ -782,11 +787,11 @@ LRESULT CBaseWindow::OnPaletteChange(HWND hwnd,UINT Message)
         }
 
         // Avoid recursion with multiple graphs in the same app
-#ifdef DEBUG
+#ifdef _DEBUG
         m_bRealizing = TRUE;
 #endif
         DoRealisePalette(Message != WM_QUERYNEWPALETTE);
-#ifdef DEBUG
+#ifdef _DEBUG
         m_bRealizing = FALSE;
 #endif
 
@@ -869,7 +874,7 @@ HDC CBaseWindow::GetMemoryHDC()
 }
 
 
-#ifdef DEBUG
+#ifdef _DEBUG
 HPALETTE CBaseWindow::GetPalette()
 {
     // The palette lock should always be held when accessing
@@ -940,7 +945,7 @@ CDrawImage::CDrawImage(__inout CBaseWindow *pBaseWindow) :
 
 void CDrawImage::DisplaySampleTimes(IMediaSample *pSample)
 {
-#ifdef DEBUG
+#ifdef _DEBUG
     //
     // Only allow the "annoying" time messages if the users has turned the
     // logging "way up"
@@ -1001,6 +1006,7 @@ void CDrawImage::UpdateColourTable(HDC hdc,__in BITMAPINFOHEADER *pbmi)
 
     // Should always succeed but check in debug builds
     ASSERT(uiReturn == pbmi->biClrUsed);
+	UNREFERENCED_PARAMETER(uiReturn);
 }
 
 
@@ -1106,7 +1112,7 @@ void CDrawImage::FastRender(IMediaSample *pMediaSample)
     // draw the times into the offscreen device context however that actually
     // writes the text into the image data buffer which may not be writable
 
-    #ifdef DEBUG
+    #ifdef _DEBUG
     DisplaySampleTimes(pMediaSample);
     #endif
 
@@ -1201,7 +1207,7 @@ void CDrawImage::SlowRender(IMediaSample *pMediaSample)
     // the screen, unfortunately this has considerable performance penalties
     // and also means that this code is not executed when compiled retail
 
-    #ifdef DEBUG
+    #ifdef _DEBUG
     DisplaySampleTimes(pMediaSample);
     #endif
 }
@@ -1460,7 +1466,7 @@ CImageAllocator::CImageAllocator(__inout CBaseFilter *pFilter,
 
 // Check our DIB buffers have been released
 
-#ifdef DEBUG
+#ifdef _DEBUG
 CImageAllocator::~CImageAllocator()
 {
     ASSERT(m_bCommitted == FALSE);
@@ -1783,7 +1789,7 @@ CImagePalette::CImagePalette(__inout CBaseFilter *pBaseFilter,
 
 // Destructor
 
-#ifdef DEBUG
+#ifdef _DEBUG
 CImagePalette::~CImagePalette()
 {
     ASSERT(m_hPalette == NULL);
@@ -2280,7 +2286,7 @@ DWORD CImageDisplay::CountPrefixBits(DWORD Field)
     DWORD Mask = 1;
     DWORD Count = 0;
 
-    while (TRUE) {
+    for (;;) {
         if (Field & Mask) {
             return Count;
         }
@@ -2445,6 +2451,7 @@ HRESULT CImageDisplay::UpdateFormat(__inout VIDEOINFO *pVideoInfo)
     ASSERT(pVideoInfo);
 
     BITMAPINFOHEADER *pbmi = HEADER(pVideoInfo);
+	UNREFERENCED_PARAMETER(pbmi);
     SetRectEmpty(&pVideoInfo->rcSource);
     SetRectEmpty(&pVideoInfo->rcTarget);
 
@@ -2677,6 +2684,7 @@ STDAPI ConvertVideoInfoToVideoInfo2(__inout AM_MEDIA_TYPE *pmt)
         return E_INVALIDARG;
     }
     VIDEOINFO *pVideoInfo = (VIDEOINFO *)pmt->pbFormat;
+	UNREFERENCED_PARAMETER(pVideoInfo);
     DWORD dwNewSize;
     HRESULT hr = DWordAdd(pmt->cbFormat, sizeof(VIDEOINFOHEADER2) - sizeof(VIDEOINFOHEADER), &dwNewSize);
     if (FAILED(hr)) {

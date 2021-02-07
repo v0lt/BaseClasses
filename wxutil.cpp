@@ -8,9 +8,10 @@
 //------------------------------------------------------------------------------
 
 
-#include <streams.h>
+#include "streams.h"
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
+#include <process.h> //MPC-BE patch
 
 
 // --- CAMEvent -----------------------
@@ -55,7 +56,7 @@ BOOL CAMMsgEvent::WaitMsg(DWORD dwTimeout)
     // timeout (in MS) to expire.  allow SENT messages
     // to be processed while we wait
     DWORD dwWait;
-    DWORD dwStartTime;
+	DWORD dwStartTime = 0;
 
     // set the waiting period.
     DWORD dwWaitTime = dwTimeout;
@@ -110,7 +111,7 @@ CAMThread::~CAMThread() {
 
 // when the thread starts, it calls this function. We unwrap the 'this'
 //pointer and call ThreadProc.
-DWORD WINAPI
+unsigned int WINAPI //MPC-BE patch
 CAMThread::InitialThreadProc(__inout LPVOID pv)
 {
     HRESULT hrCoInit = CAMThread::CoInitializeHelper();
@@ -132,21 +133,20 @@ CAMThread::InitialThreadProc(__inout LPVOID pv)
 BOOL
 CAMThread::Create()
 {
-    DWORD threadid;
-
     CAutoLock lock(&m_AccessLock);
 
     if (ThreadExists()) {
 	return FALSE;
     }
 
-    m_hThread = CreateThread(
-		    NULL,
-		    0,
-		    CAMThread::InitialThreadProc,
-		    this,
-		    0,
-		    &threadid);
+	//MPC-BE patch
+	m_hThread = (HANDLE)_beginthreadex( NULL,						 /* Security */
+										0,							/* Stack Size */
+										CAMThread::InitialThreadProc, /* Thread process */
+										(LPVOID)this,				 /* Arguments */
+										0,							/* 0 = Start Immediately */
+										NULL						  /* Thread Address */
+										);
 
     if (!m_hThread) {
 	return FALSE;
@@ -334,7 +334,7 @@ CMsgThread::GetThreadMsg(__out CMsg *msg)
     CMsg * pmsg = NULL;
 
     // keep trying until a message appears
-    while (TRUE) {
+    for (;;) {
         {
             CAutoLock lck(&m_Lock);
             pmsg = m_ThreadQueue.RemoveHead();
@@ -344,7 +344,7 @@ CMsgThread::GetThreadMsg(__out CMsg *msg)
                 break;
             }
         }
-        // the semaphore will be signalled when it is non-empty
+        // the semaphore will be signaled when it is non-empty
         WaitForSingleObject(m_hSem, INFINITE);
     }
     // copy fields to caller's CMsg
@@ -457,7 +457,7 @@ HRESULT AMSafeMemMoveOffset(
 }
 
 
-#ifdef DEBUG
+#ifdef _DEBUG
 /******************************Public*Routine******************************\
 * Debug CCritSec helpers
 *
@@ -559,6 +559,7 @@ STDAPI FreeBSTR(__deref_in BSTR* pstr)
 {
     if( (PVOID)*pstr == NULL ) return S_FALSE;
     SysFreeString( *pstr );
+    *pstr = NULL;
     return NOERROR;
 }
 
@@ -600,8 +601,8 @@ DWORD WINAPI WaitDispatchingMessages(
 {
     BOOL bPeeked = FALSE;
     DWORD dwResult;
-    DWORD dwStart;
-    DWORD dwThreadPriority;
+    DWORD dwStart = 0;
+    DWORD dwThreadPriority = THREAD_PRIORITY_NORMAL;
 
     static UINT uMsgId = 0;
 

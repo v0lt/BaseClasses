@@ -10,7 +10,7 @@
 //------------------------------------------------------------------------------
 
 
-#include <streams.h>
+#include "streams.h"
 
 
 //
@@ -202,11 +202,11 @@ DWORD WINAPI COutputQueue::InitialThreadProc(__in LPVOID pv)
 //
 DWORD COutputQueue::ThreadProc()
 {
-    while (TRUE) {
+    for (;;) {
         BOOL          bWait = FALSE;
         IMediaSample *pSample;
-        LONG          lNumberToSend; // Local copy
-        NewSegmentPacket* ppacket;
+        LONG          lNumberToSend = 0; // Local copy
+        NewSegmentPacket* ppacket = NULL;
 
         //
         //  Get a batch of samples and send it if possible
@@ -215,7 +215,7 @@ DWORD COutputQueue::ThreadProc()
         //
         {
             CAutoLock lck(this);
-            while (TRUE) {
+            for (;;) {
 
                 if (m_bTerminate) {
                     FreeSamples();
@@ -717,7 +717,7 @@ void COutputQueue::FreeSamples()
 {
     CAutoLock lck(this);
     if (IsQueued()) {
-        while (TRUE) {
+        for (;;) {
             IMediaSample *pSample = m_List->RemoveHead();
 	    // inform derived class we took something off the queue
 	    if (m_hEventPop) {

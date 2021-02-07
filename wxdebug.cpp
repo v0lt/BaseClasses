@@ -8,14 +8,14 @@
 //------------------------------------------------------------------------------
 
 
-#define _WINDLL
+//#define _WINDLL
 
-#include <streams.h>
+#include "streams.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <dvdmedia.h>
 
-#ifdef DEBUG
+#ifdef _DEBUG
 #ifdef UNICODE
 #ifndef _UNICODE
 #define _UNICODE
@@ -26,7 +26,7 @@
 #include <tchar.h>
 #include <strsafe.h>
 
-#ifdef DEBUG
+#ifdef _DEBUG
 static void DisplayBITMAPINFO(const BITMAPINFOHEADER* pbmi);
 static void DisplayRECT(LPCTSTR szLabel, const RECT& rc);
 
@@ -340,7 +340,8 @@ void WINAPI DbgInitLogTo (
             if (INVALID_HANDLE_VALUE != m_hOutput)
             {
               static const TCHAR cszBar[] = TEXT("\r\n\r\n=====DbgInitialize()=====\r\n\r\n");
-              SetFilePointer (m_hOutput, 0, NULL, FILE_END);
+              LARGE_INTEGER zero = {0, 0};
+              SetFilePointerEx(m_hOutput, zero, NULL, FILE_END);
               DbgOutString (cszBar);
             }
           }
@@ -1264,7 +1265,7 @@ CDisp::CDisp(double d)
    We also display the fields in the BITMAPINFOHEADER structure, this should
    succeed as we do not accept input types unless the format is big enough */
 
-#ifdef DEBUG
+#ifdef _DEBUG
 void WINAPI DisplayType(LPCTSTR label, const AM_MEDIA_TYPE *pmtIn)
 {
 

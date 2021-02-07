@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 
 
-#include <streams.h>
+#include "streams.h"
 #pragma warning( disable : 4514 )   // Disable warnings re unused inline functions
 
 
@@ -24,7 +24,7 @@ CBaseObject::CBaseObject(__in_opt LPCTSTR pName)
     /* Increment the number of active objects */
     InterlockedIncrement(&m_cObjects);
 
-#ifdef DEBUG
+#ifdef _DEBUG
 
 #ifdef UNICODE
     m_dwCookie = DbgRegisterObjectCreation(0, pName);
@@ -41,7 +41,7 @@ CBaseObject::CBaseObject(const char *pName)
     /* Increment the number of active objects */
     InterlockedIncrement(&m_cObjects);
 
-#ifdef DEBUG
+#ifdef _DEBUG
     m_dwCookie = DbgRegisterObjectCreation(pName, 0);
 #endif
 }
@@ -63,7 +63,7 @@ CBaseObject::~CBaseObject()
     };
 
 
-#ifdef DEBUG
+#ifdef _DEBUG
     DbgRegisterObjectDestruction(m_dwCookie);
 #endif
 }
@@ -164,6 +164,7 @@ STDMETHODIMP_(ULONG) CUnknown::NonDelegatingAddRef()
 {
     LONG lRef = InterlockedIncrement( &m_cRef );
     ASSERT(lRef > 0);
+	UNREFERENCED_PARAMETER(lRef);
     DbgLog((LOG_MEMORY,3,TEXT("    Obj %d ref++ = %d"),
            m_dwCookie, m_cRef));
     return ourmax(ULONG(m_cRef), 1ul);
