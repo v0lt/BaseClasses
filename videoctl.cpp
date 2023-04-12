@@ -48,18 +48,8 @@ LPWSTR WINAPI WideStringFromResource(__out_ecount(STR_MAX_LENGTH) LPWSTR pBuffer
 {
     *pBuffer = 0;
 
-    if (g_amPlatform == VER_PLATFORM_WIN32_NT) {
 	LoadStringW(g_hInst,iResourceID,pBuffer,STR_MAX_LENGTH);
-    } else {
 
-	CHAR szBuffer[STR_MAX_LENGTH];
-	DWORD dwStringLength = LoadString(g_hInst,iResourceID,szBuffer,STR_MAX_LENGTH);
-	// if we loaded a string convert it to wide characters, ensuring
-	// that we also null terminate the result.
-	if (dwStringLength++) {
-	    MultiByteToWideChar(CP_ACP,0,szBuffer,dwStringLength,pBuffer,STR_MAX_LENGTH);
-	}
-    }
     return pBuffer;
 }
 

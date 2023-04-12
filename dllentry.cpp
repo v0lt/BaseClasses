@@ -26,8 +26,6 @@ extern CFactoryTemplate g_Templates[];
 extern int g_cTemplates;
 
 HINSTANCE g_hInst;
-DWORD	  g_amPlatform;		// VER_PLATFORM_WIN32_WINDOWS etc... (from GetVersionEx)
-OSVERSIONINFO g_osInfo;
 
 //
 // an instance of this is created by the DLLGetClassObject entrypoint
@@ -328,17 +326,6 @@ _DllEntryPoint(
 
     	{
     	    SetHeapOptions();
-    	    // The platform identifier is used to work out whether
-    	    // full unicode support is available or not.  Hence the
-    	    // default will be the lowest common denominator - i.e. N/A
-                g_amPlatform = VER_PLATFORM_WIN32_WINDOWS; // win95 assumed in case GetVersionEx fails
-    
-                g_osInfo.dwOSVersionInfoSize = sizeof(g_osInfo);
-                if (GetVersionEx(&g_osInfo)) {
-            	g_amPlatform = g_osInfo.dwPlatformId;
-    	    } else {
-    		DbgLog((LOG_ERROR, 1, TEXT("Failed to get the OS platform, assuming Win95")));
-    	    }
     	}
 
         g_hInst = hInstance;
