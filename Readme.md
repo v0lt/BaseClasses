@@ -1,6 +1,8 @@
 ﻿# BaseClasses (MPC-BE project)
 
-BaseClasses from Win7Samples with changes from MPC-BE project. 
+BaseClasses from Win7Samples with changes from MPC-BE project.
+
+Windows XP and newer are supported.
 
 ## Links
 
