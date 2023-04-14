@@ -12,7 +12,6 @@
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 #include <process.h> //MPC-BE patch
-#include <VersionHelpers.h>
 
 
 // --- CAMEvent -----------------------
@@ -729,32 +728,14 @@ the Platform SDK for more information.
 ******************************************************************************/
 MMRESULT CompatibleTimeSetEvent( UINT uDelay, UINT uResolution, __in LPTIMECALLBACK lpTimeProc, DWORD_PTR dwUser, UINT fuEvent )
 {
-    #if WINVER >= 0x0501
-    {
-        static bool fCheckedVersion = false;
-        static bool fTimeKillSynchronousFlagAvailable = false; 
-
-        if( !fCheckedVersion ) {
-            fTimeKillSynchronousFlagAvailable = TimeKillSynchronousFlagAvailable();
-            fCheckedVersion = true;
-        }
-
-        if( fTimeKillSynchronousFlagAvailable ) {
-            fuEvent = fuEvent | TIME_KILL_SYNCHRONOUS;
-        }
-    }
-    #endif // WINVER >= 0x0501
+    //MPC-BE patch
+    fuEvent = fuEvent | TIME_KILL_SYNCHRONOUS;
 
     return timeSetEvent( uDelay, uResolution, lpTimeProc, dwUser, fuEvent );
 }
 
 bool TimeKillSynchronousFlagAvailable( void )
 {
-    if(IsWindowsXPOrGreater()) {
-        // timeSetEvent() started supporting the TIME_KILL_SYNCHRONOUS flag
-        // in Windows XP.
-        return true;
-    }
-
-    return false;
+    //MPC-BE patch
+    return true;
 }
