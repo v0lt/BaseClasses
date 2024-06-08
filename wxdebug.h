@@ -244,29 +244,6 @@ typedef struct tag_ObjectDesc {
 #define ValidateStringPtrW(p) 0
 
 
-#ifdef _OBJBASE_H_
-
-    //  Outputting GUID names.  If you want to include the name
-    //  associated with a GUID (eg CLSID_...) then
-    //
-    //      GuidNames[yourGUID]
-    //
-    //  Returns the name defined in uuids.h as a string
-
-    typedef struct {
-        const CHAR *szName;
-        GUID    guid;
-    } GUID_STRING_ENTRY;
-
-    class CGuidNameList {
-    public:
-        const CHAR *operator [] (const GUID& guid);
-    };
-
-    extern CGuidNameList GuidNames;
-
-#endif
-
 #ifndef REMIND
     //  REMIND macro - generates warning as reminder to complete coding
     //  (eg) usage:

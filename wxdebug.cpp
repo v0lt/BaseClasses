@@ -1064,41 +1064,6 @@ void WINAPI DbgSetWaitTimeout(DWORD dwTimeout)
 
 #endif /* DEBUG */
 
-#ifdef _OBJBASE_H_
-
-    /*  Stuff for printing out our GUID names */
-
-    GUID_STRING_ENTRY g_GuidNames[] = {
-    #define OUR_GUID_ENTRY(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
-    { #name, { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } } },
-        #include <uuids.h>
-    };
-
-    CGuidNameList GuidNames;
-    int g_cGuidNames = sizeof(g_GuidNames) / sizeof(g_GuidNames[0]);
-
-    const char *CGuidNameList::operator [] (const GUID &guid)
-    {
-        for (int i = 0; i < g_cGuidNames; i++) {
-            if (g_GuidNames[i].guid == guid) {
-                return g_GuidNames[i].szName;
-            }
-        }
-        if (guid == GUID_NULL) {
-            return "GUID_NULL";
-        }
-        if (guid == GUID{ 0xe487eb08, 0x6b26, 0x4be9, 0x9d, 0xd3, 0x99, 0x34, 0x34, 0xd3, 0x13, 0xfd }) {
-            return "MEDIATYPE_Subtitle";
-        }
-
-	// !!! add something to print FOURCC guids?
-	
-	// shouldn't this print the hex CLSID?
-        return "Unknown GUID Name";
-    }
-
-#endif /* _OBJBASE_H_ */
-
 /*  CDisp class - display our data types */
 
 // clashes with REFERENCE_TIME
@@ -1277,7 +1242,7 @@ void WINAPI DisplayType(LPCTSTR label, const AM_MEDIA_TYPE *pmtIn)
     DbgLog((LOG_TRACE,5,TEXT("")));
     DbgLog((LOG_TRACE,2,TEXT("%s  M type %hs  S type %hs"), label,
 	    GuidNames[pmtIn->majortype],
-	    GuidNames[pmtIn->subtype]));
+        GET_GUID_NAME(pmtIn->subtype)));
     DbgLog((LOG_TRACE,5,TEXT("Subtype description %s"),GetSubtypeName(&pmtIn->subtype)));
 
     /* Dump the generic media types */
@@ -1317,7 +1282,7 @@ void WINAPI DisplayType(LPCTSTR label, const AM_MEDIA_TYPE *pmtIn)
         DbgLog((LOG_TRACE,2,TEXT("     Format type %hs"),
             GuidNames[pmtIn->formattype]));
         DbgLog((LOG_TRACE,2,TEXT("     Subtype %hs"),
-            GuidNames[pmtIn->subtype]));
+            GET_GUID_NAME(pmtIn->subtype)));
 
         if ((pmtIn->subtype != MEDIASUBTYPE_MPEG1Packet)
           && (pmtIn->cbFormat >= sizeof(PCMWAVEFORMAT)))

@@ -137,6 +137,7 @@ typedef struct {
 
 #include "reftime.h"    // Helper class for REFERENCE_TIME management
 #include "wxdebug.h"    // Debug support for logging and ASSERTs
+#include "guidutil.h"
 #include <amvideo.h>    // ActiveMovie video interfaces and definitions
 //include amaudio.h explicitly if you need it.  it requires the DX SDK.
 //#include <amaudio.h>    // ActiveMovie audio interfaces and definitions

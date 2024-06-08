@@ -1683,7 +1683,7 @@ void CBasePin::DisplayTypeInfo(IPin *pPin, const CMediaType *pmt)
         DbgLog((LOG_TRACE, CONNECT_TRACE_LEVEL, TEXT("    major type:  %hs"),
                GuidNames[*pmt->Type()]));
         DbgLog((LOG_TRACE, CONNECT_TRACE_LEVEL, TEXT("    sub type  :  %hs"),
-               GuidNames[*pmt->Subtype()]));
+               GET_GUID_NAME(*pmt->Subtype())));
     }
 }
 #endif
