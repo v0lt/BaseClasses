@@ -1087,6 +1087,9 @@ void WINAPI DbgSetWaitTimeout(DWORD dwTimeout)
         if (guid == GUID_NULL) {
             return "GUID_NULL";
         }
+        if (guid == GUID{ 0xe487eb08, 0x6b26, 0x4be9, 0x9d, 0xd3, 0x99, 0x34, 0x34, 0xd3, 0x13, 0xfd }) {
+            return "MEDIATYPE_Subtitle";
+        }
 
 	// !!! add something to print FOURCC guids?
 	
