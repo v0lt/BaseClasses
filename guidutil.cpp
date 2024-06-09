@@ -48,7 +48,13 @@ std::string CGuidNameList::GetString(const GUID& guid, bool allowhex)
         uint32_t fourcc = guid.Data1;
         for (unsigned i = 0; i < 4; i++) {
             const uint32_t c = fourcc & 0xff;
-            str.append(c < 32 ? "[%u]" : "%c", c);
+            if (c > 32) {
+                str += (char)c;
+            } else {
+                str += '[';
+                str.append(std::to_string(c));
+                str += ']';
+            }
             fourcc >>= 8;
         }
     }
