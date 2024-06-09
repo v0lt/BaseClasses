@@ -1280,7 +1280,7 @@ void WINAPI DisplayType(LPCTSTR label, const AM_MEDIA_TYPE *pmtIn)
 
     } else if (pmtIn->majortype == MEDIATYPE_Audio) {
         DbgLog((LOG_TRACE,2,TEXT("     Format type %hs"),
-            GuidNames[pmtIn->formattype]));
+            GET_GUID_NAME(pmtIn->formattype)));
         DbgLog((LOG_TRACE,2,TEXT("     Subtype %hs"),
             GET_GUID_NAME(pmtIn->subtype)));
 
@@ -1307,7 +1307,7 @@ void WINAPI DisplayType(LPCTSTR label, const AM_MEDIA_TYPE *pmtIn)
 
     } else {
         DbgLog((LOG_TRACE,2,TEXT("     Format type %hs"),
-            GuidNames[pmtIn->formattype]));
+            GET_GUID_NAME(pmtIn->formattype)));
     }
 }
 

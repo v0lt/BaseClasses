@@ -14,23 +14,33 @@
 //
 //  Returns the name defined in uuids.h as a string
 
-typedef struct {
-    const CHAR* szName;
-    GUID    guid;
-} GUID_STRING_ENTRY;
+struct GuidStringEntry {
+    GUID guid;
+    const char* szName;
+};
+
+struct WaveStringEntry {
+    WORD wFormatTag;
+    const char* szName;
+};
 
 class CGuidNameList {
+    static inline const GuidStringEntry* m_pStrGuids = nullptr;
+    static inline size_t                 m_nStrGuids = 0;
+    static inline const WaveStringEntry* m_pStrWaves = nullptr;
+    static inline size_t                 m_nStrWaves = 0;
 public:
     const CHAR* operator [] (const GUID& guid);
 #ifdef USE_STD_STRING
-    std::string GetString(const GUID& guid, bool allowhex);
+    std::string GetString(const GUID& guid);
+    void SetExtraGuidStrings(const GuidStringEntry* pStrGuids, const size_t nStrGuids, const WaveStringEntry* pStrWaves, const size_t nStrWaves);
 #endif
 };
 
 extern CGuidNameList GuidNames;
 
 #ifdef USE_STD_STRING
-#define GET_GUID_NAME(guid) GuidNames.GetString(guid, true).c_str()
+#define GET_GUID_NAME(guid) GuidNames.GetString(guid).c_str()
 #else
 #define GET_GUID_NAME(guid) GuidNames[guid]
 #endif
