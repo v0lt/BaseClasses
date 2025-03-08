@@ -378,32 +378,17 @@ AMovieDllRegisterServer2( BOOL bRegister )
   //
   WCHAR achFileName[MAX_PATH];
 
-  // WIN95 doesn't support GetModuleFileNameW
-  //
+  DbgLog((LOG_TRACE, 2, TEXT("- get module file name")));
+
+  // g_hInst handle is set in our dll entry point. Make sure
+  // DllEntryPoint in dllentry.cpp is called
+  ASSERT(g_hInst != 0);
+
+  if (0 == GetModuleFileNameW(g_hInst, achFileName, MAX_PATH))
   {
-    char achTemp[MAX_PATH];
-
-    DbgLog((LOG_TRACE, 2, TEXT("- get module file name")));
-
-    // g_hInst handle is set in our dll entry point. Make sure
-    // DllEntryPoint in dllentry.cpp is called
-    ASSERT(g_hInst != 0);
-
-    if( 0 == GetModuleFileNameA( g_hInst
-                              , achTemp
-                              , sizeof(achTemp) ) )
-    {
-      // we've failed!
-      DWORD dwerr = GetLastError();
-      return AmHresultFromWin32(dwerr);
-    }
-
-    MultiByteToWideChar( CP_ACP
-                       , 0L
-                       , achTemp
-                       , lstrlenA(achTemp) + 1
-                       , achFileName
-                       , NUMELMS(achFileName) );
+    // we've failed!
+    DWORD dwerr = GetLastError();
+    return AmHresultFromWin32(dwerr);
   }
 
   //
@@ -540,26 +525,11 @@ AMovieDllRegisterServer( void )
   //
   WCHAR achFileName[MAX_PATH];
 
+  if (0 == GetModuleFileNameW(g_hInst, achFileName, MAX_PATH))
   {
-    // WIN95 doesn't support GetModuleFileNameW
-    //
-    char achTemp[MAX_PATH];
-
-    if( 0 == GetModuleFileNameA( g_hInst
-                              , achTemp
-                              , sizeof(achTemp) ) )
-    {
-      // we've failed!
-      DWORD dwerr = GetLastError();
-      return AmHresultFromWin32(dwerr);
-    }
-
-    MultiByteToWideChar( CP_ACP
-                       , 0L
-                       , achTemp
-                       , lstrlenA(achTemp) + 1
-                       , achFileName
-                       , NUMELMS(achFileName) );
+    // we've failed!
+    DWORD dwerr = GetLastError();
+    return AmHresultFromWin32(dwerr);
   }
 
   // scan through array of CFactoryTemplates
