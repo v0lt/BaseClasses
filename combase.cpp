@@ -84,6 +84,7 @@ HINSTANCE LoadOLEAut32()
 /* Constructor */
 
 // We know we use "this" in the initialization list, we also know we don't modify *phr.
+#pragma warning(push)
 #pragma warning( disable : 4355 4100 )
 CUnknown::CUnknown(__in_opt LPCTSTR pName, __in_opt LPUNKNOWN pUnk)
 : CBaseObject(pName)
@@ -127,7 +128,7 @@ CUnknown::CUnknown(__in_opt LPCSTR pName, __in_opt LPUNKNOWN pUnk, __inout_opt H
 
 #endif
 
-#pragma warning( default : 4355 4100 )
+#pragma warning(pop)
 
 
 /* QueryInterface */

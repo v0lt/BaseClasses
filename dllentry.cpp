@@ -258,7 +258,7 @@ DllCanUnloadNow()
 
 // --- standard WIN32 entrypoints --------------------------------------
 BOOL SetHeapOptions() {
-   HMODULE hLib = LoadLibrary(L"kernel32.dll");
+   HMODULE hLib = LoadLibrary(TEXT("kernel32.dll"));
    if (hLib == NULL) return FALSE;
 
    typedef BOOL (WINAPI *HSI)
@@ -276,7 +276,7 @@ BOOL SetHeapOptions() {
    BOOL fRet = (pHsi)(NULL,HeapEnableTerminationOnCorruption,NULL,0) 
             ? TRUE 
             : FALSE;
-   if (hLib) FreeLibrary(hLib);
+   FreeLibrary(hLib);
 
    return fRet;
 }
