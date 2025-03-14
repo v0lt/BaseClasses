@@ -5,7 +5,7 @@
 
 /*  Stuff for printing out our GUID names */
 
-GuidStringEntry g_GuidNames[] = {
+constexpr GuidStringEntry g_GuidNames[] = {
 #define OUR_GUID_ENTRY(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
 { { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }, #name },
     #include <uuids.h>
@@ -14,7 +14,7 @@ GuidStringEntry g_GuidNames[] = {
 CGuidNameList GuidNames;
 int g_cGuidNames = sizeof(g_GuidNames) / sizeof(g_GuidNames[0]);
 
-const char *CGuidNameList::operator [] (const GUID &guid)
+LPCSTR CGuidNameList::operator [] (const GUID &guid)
 {
     for (int i = 0; i < g_cGuidNames; i++) {
         if (g_GuidNames[i].guid == guid) {

@@ -16,12 +16,12 @@
 
 struct GuidStringEntry {
     GUID guid;
-    const char* szName;
+    LPCSTR szName;
 };
 
 struct WaveStringEntry {
     WORD wFormatTag;
-    const char* szName;
+    LPCSTR szName;
 };
 
 class CGuidNameList {
@@ -30,7 +30,7 @@ class CGuidNameList {
     static inline const WaveStringEntry* m_pStrWaves = nullptr;
     static inline size_t                 m_nStrWaves = 0;
 public:
-    const CHAR* operator [] (const GUID& guid);
+    LPCSTR operator [] (const GUID& guid);
 #ifdef USE_STD_STRING
     std::string GetString(const GUID& guid);
     void SetExtraGuidStrings(const GuidStringEntry* pStrGuids, const size_t nStrGuids, const WaveStringEntry* pStrWaves, const size_t nStrWaves);
