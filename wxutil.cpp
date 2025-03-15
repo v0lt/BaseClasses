@@ -99,9 +99,11 @@ BOOL CAMMsgEvent::WaitMsg(DWORD dwTimeout)
 
 CAMThread::CAMThread(__inout_opt HRESULT *phr)
     : m_EventSend(TRUE, phr),     // must be manual-reset for CheckRequest()
-      m_EventComplete(FALSE, phr)
+      m_EventComplete(FALSE, phr),
+      m_hThread(NULL),
+      m_dwParam(0),
+      m_dwReturnVal(0)
 {
-    m_hThread = NULL;
 }
 
 CAMThread::~CAMThread() {
@@ -140,12 +142,12 @@ CAMThread::Create()
     }
 
 	//MPC-BE patch
-	m_hThread = (HANDLE)_beginthreadex( NULL,						 /* Security */
-										0,							/* Stack Size */
+	m_hThread = (HANDLE)_beginthreadex( NULL,                         /* Security */
+										0,                            /* Stack Size */
 										CAMThread::InitialThreadProc, /* Thread process */
-										(LPVOID)this,				 /* Arguments */
-										0,							/* 0 = Start Immediately */
-										NULL						  /* Thread Address */
+										(LPVOID)this,                 /* Arguments */
+										0,                            /* 0 = Start Immediately */
+										NULL                          /* Thread Address */
 										);
 
     if (!m_hThread) {
