@@ -25,16 +25,16 @@ const struct {
     WORD BitCount;
     LPCSTR  pName;
     LPCWSTR wszName;
-} BitCountMap[] =  { &MEDIASUBTYPE_RGB1,        1,   "RGB Monochrome",     L"RGB Monochrome",   
-                     &MEDIASUBTYPE_RGB4,        4,   "RGB VGA",            L"RGB VGA",          
-                     &MEDIASUBTYPE_RGB8,        8,   "RGB 8",              L"RGB 8",            
-                     &MEDIASUBTYPE_RGB565,     16,   "RGB 565 (16 bit)",   L"RGB 565 (16 bit)", 
-                     &MEDIASUBTYPE_RGB555,     16,   "RGB 555 (16 bit)",   L"RGB 555 (16 bit)", 
-                     &MEDIASUBTYPE_RGB24,      24,   "RGB 24",             L"RGB 24",           
-                     &MEDIASUBTYPE_RGB32,      32,   "RGB 32",             L"RGB 32",
-                     &MEDIASUBTYPE_ARGB32,     32,   "ARGB 32",            L"ARGB 32",
-                     &MEDIASUBTYPE_Overlay,     0,   "Overlay",            L"Overlay",          
-                     &GUID_NULL,                0,   "UNKNOWN",            L"UNKNOWN"           
+} BitCountMap[] =  { &MEDIASUBTYPE_RGB1,     1, "RGB Monochrome",   L"RGB Monochrome",
+                     &MEDIASUBTYPE_RGB4,     4, "RGB VGA",          L"RGB VGA",
+                     &MEDIASUBTYPE_RGB8,     8, "RGB 8",            L"RGB 8",
+                     &MEDIASUBTYPE_RGB565,  16, "RGB 565 (16 bit)", L"RGB 565 (16 bit)",
+                     &MEDIASUBTYPE_RGB555,  16, "RGB 555 (16 bit)", L"RGB 555 (16 bit)",
+                     &MEDIASUBTYPE_RGB24,   24, "RGB 24",           L"RGB 24",
+                     &MEDIASUBTYPE_RGB32,   32, "RGB 32",           L"RGB 32",
+                     &MEDIASUBTYPE_ARGB32,  32, "ARGB 32",          L"ARGB 32",
+                     &MEDIASUBTYPE_Overlay,  0, "Overlay",          L"Overlay",
+                     &GUID_NULL,             0, "UNKNOWN",          L"UNKNOWN"
 };
 
 // Return the size of the bitmap as defined by this header
