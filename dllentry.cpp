@@ -19,7 +19,7 @@
 #endif // UNICODE
 
 #include <tchar.h>
-#endif // DEBUG
+#endif // _DEBUG
 #include <strsafe.h>
 
 extern CFactoryTemplate g_Templates[];

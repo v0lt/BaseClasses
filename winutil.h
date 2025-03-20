@@ -123,7 +123,7 @@ public:
 
     #ifdef _DEBUG
     HPALETTE GetPalette();
-    #endif // DEBUG
+    #endif // _DEBUG
 
     // This is the window procedure the derived object should override
 

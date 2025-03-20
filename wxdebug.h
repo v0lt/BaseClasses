@@ -295,7 +295,7 @@ public:
 };
 
 
-#if defined(DEBUG)
+#ifdef _DEBUG
 class CAutoTrace
 {
 private:

@@ -885,7 +885,7 @@ HPALETTE CBaseWindow::GetPalette()
     ASSERT(CritCheckIn(&m_PaletteLock));
     return m_hPalette;
 }
-#endif // DEBUG
+#endif // _DEBUG
 
 
 // This is available to clients who want to change the window visiblity. It's

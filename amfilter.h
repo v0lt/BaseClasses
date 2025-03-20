@@ -985,7 +985,7 @@ public:
     virtual HRESULT Deliver(IMediaSample *pSample);
     virtual HRESULT DeliverEndOfStream(void);
     virtual HRESULT DeliverNewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop, double dRate);
-    #endif // DEBUG
+    #endif // _DEBUG
 
     HRESULT DeliverBeginFlush(void);
     HRESULT DeliverEndFlush(void);
@@ -1077,7 +1077,7 @@ private:
 
     #ifdef _DEBUG
     void AssertValid(void);
-    #endif // DEBUG
+    #endif // _DEBUG
 };
 
 class CAutoUsingOutputPin
@@ -1147,7 +1147,7 @@ inline HRESULT CDynamicOutputPin::DeliverNewSegment(REFERENCE_TIME tStart, REFER
     return CBaseOutputPin::DeliverNewSegment(tStart, tStop, dRate);
 }
 
-#endif // DEBUG
+#endif // _DEBUG
 
 //=====================================================================
 //=====================================================================

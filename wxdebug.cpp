@@ -21,7 +21,7 @@
 #define _UNICODE
 #endif // _UNICODE
 #endif // UNICODE
-#endif // DEBUG
+#endif // _DEBUG
 
 #include <tchar.h>
 #include <strsafe.h>
@@ -1062,7 +1062,7 @@ void WINAPI DbgSetWaitTimeout(DWORD dwTimeout)
     dwWaitTimeout = dwTimeout;
 }
 
-#endif /* DEBUG */
+#endif // _DEBUG
 
 /*  CDisp class - display our data types */
 
