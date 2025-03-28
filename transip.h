@@ -247,4 +247,3 @@ protected:
 }; // CTransInPlaceFilter
 
 #endif /* __TRANSIP__ */
-

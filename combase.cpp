@@ -264,4 +264,3 @@ BOOL WINAPI IsEqualObject(IUnknown *pFirst, IUnknown *pSecond)
     pUnknown2->Release();
     return (pUnknown1 == pUnknown2);
 }
-

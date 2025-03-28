@@ -720,11 +720,11 @@ timeSetEvent() if the current operating system supports it.  TIME_KILL_SYNCHRONO
 is supported on Windows XP and later operating systems.
 
 Parameters:
-- The same parameters as timeSetEvent().  See timeSetEvent()'s documentation in 
+- The same parameters as timeSetEvent().  See timeSetEvent()'s documentation in
 the Platform SDK for more information.
 
 Return Value:
-- The same return value as timeSetEvent().  See timeSetEvent()'s documentation in 
+- The same return value as timeSetEvent().  See timeSetEvent()'s documentation in
 the Platform SDK for more information.
 
 ******************************************************************************/

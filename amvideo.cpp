@@ -164,7 +164,7 @@ int LocateSubtype(const GUID *pSubtype)
         {
             break;
         }
-        
+
         iPosition++;
     }
 
@@ -212,11 +212,11 @@ STDAPI_(LPCSTR) GetSubtypeName(const GUID *pSubtype)
 
 STDAPI_(LONG) GetBitmapFormatSize(const BITMAPINFOHEADER *pHeader)
 {
-    // Everyone has this to start with this  
+    // Everyone has this to start with this
     LONG Size = SIZE_PREHEADER + pHeader->biSize;
 
     ASSERT(pHeader->biSize >= sizeof(BITMAPINFOHEADER));
-    
+
     // Does this format use a palette, if the number of colours actually used
     // is zero then it is set to the maximum that are allowed for that colour
     // depth (an example is 256 for eight bits). Truecolour formats may also

@@ -273,8 +273,8 @@ BOOL SetHeapOptions() {
 #   define HeapEnableTerminationOnCorruption (HEAP_INFORMATION_CLASS)1
 #endif
 
-   BOOL fRet = (pHsi)(NULL,HeapEnableTerminationOnCorruption,NULL,0) 
-            ? TRUE 
+   BOOL fRet = (pHsi)(NULL,HeapEnableTerminationOnCorruption,NULL,0)
+            ? TRUE
             : FALSE;
    FreeLibrary(hLib);
 
@@ -287,11 +287,11 @@ extern "C" BOOL WINAPI _DllEntryPoint(HINSTANCE, ULONG, __inout_opt LPVOID);
 
 extern "C"
 DECLSPEC_NOINLINE
-BOOL 
+BOOL
 WINAPI
 DllEntryPoint(
-    HINSTANCE hInstance, 
-    ULONG ulReason, 
+    HINSTANCE hInstance,
+    ULONG ulReason,
     __inout_opt LPVOID pv
     )
 {
@@ -304,11 +304,11 @@ DllEntryPoint(
 
 
 DECLSPEC_NOINLINE
-BOOL 
+BOOL
 WINAPI
 _DllEntryPoint(
-    HINSTANCE hInstance, 
-    ULONG ulReason, 
+    HINSTANCE hInstance,
+    ULONG ulReason,
     __inout_opt LPVOID pv
     )
 {
@@ -373,5 +373,3 @@ _DllEntryPoint(
 #endif
     return TRUE;
 }
-
-

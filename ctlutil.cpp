@@ -659,9 +659,9 @@ CPosPassThru::IsUsingTimeFormat(const GUID * pFormat)
 
 
 STDMETHODIMP
-CPosPassThru::ConvertTimeFormat(__out LONGLONG * pTarget, 
+CPosPassThru::ConvertTimeFormat(__out LONGLONG * pTarget,
                                 __in_opt const GUID * pTargetFormat,
-				LONGLONG Source, 
+				LONGLONG Source,
                                 __in_opt const GUID * pSourceFormat )
 {
     IMediaSeeking* pMS;
@@ -677,9 +677,9 @@ CPosPassThru::ConvertTimeFormat(__out LONGLONG * pTarget,
 
 
 STDMETHODIMP
-CPosPassThru::SetPositions( __inout_opt LONGLONG * pCurrent, 
-                            DWORD CurrentFlags, 
-                            __inout_opt LONGLONG * pStop, 
+CPosPassThru::SetPositions( __inout_opt LONGLONG * pCurrent,
+                            DWORD CurrentFlags,
+                            __inout_opt LONGLONG * pStop,
                             DWORD StopFlags )
 {
     IMediaSeeking* pMS;
@@ -1191,9 +1191,9 @@ HRESULT CSourceSeeking::CheckCapabilities( __inout DWORD * pCapabilities )
     return (~m_dwSeekingCaps & *pCapabilities) ? S_FALSE : S_OK;
 }
 
-HRESULT CSourceSeeking::ConvertTimeFormat( __out LONGLONG * pTarget, 
+HRESULT CSourceSeeking::ConvertTimeFormat( __out LONGLONG * pTarget,
                                            __in_opt const GUID * pTargetFormat,
-                                           LONGLONG Source, 
+                                           LONGLONG Source,
                                            __in_opt const GUID * pSourceFormat )
 {
     CheckPointer(pTarget, E_POINTER);
@@ -1214,9 +1214,9 @@ HRESULT CSourceSeeking::ConvertTimeFormat( __out LONGLONG * pTarget,
 }
 
 
-HRESULT CSourceSeeking::SetPositions( __inout_opt LONGLONG * pCurrent,  
-                                      DWORD CurrentFlags, 
-                                      __inout_opt LONGLONG * pStop,  
+HRESULT CSourceSeeking::SetPositions( __inout_opt LONGLONG * pCurrent,
+                                      DWORD CurrentFlags,
+                                      __inout_opt LONGLONG * pStop,
                                       DWORD StopFlags )
 {
     DWORD StopPosBits = StopFlags & AM_SEEKING_PositioningBitsMask;
@@ -2535,4 +2535,3 @@ CCmdQueue::GetCommandDueFor(REFERENCE_TIME rtStream, __out CDeferredCommand**ppC
     // no commands due yet
     return VFW_E_NOT_FOUND;
 }
-

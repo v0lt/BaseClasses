@@ -466,4 +466,3 @@ HRESULT CVideoTransformFilter::AlterQuality(Quality q)
 
 // This will avoid several hundred useless warnings if compiled -W4 by MS VC++ v4
 #pragma warning(disable:4514)
-

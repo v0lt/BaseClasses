@@ -378,7 +378,6 @@ INT_PTR CBasePropertyPage::OnReceiveMessage(HWND hwnd,UINT uMsg,WPARAM wParam,LP
               }
         }
     }
-		
+
     return DefWindowProc(hwnd,uMsg,wParam,lParam);
 }
-
