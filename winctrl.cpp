@@ -1236,7 +1236,7 @@ STDMETHODIMP CBaseControlVideo::GetVideoPaletteEntries(long StartIndex,
 
     // Correct the number we can retrieve
 
-    LONG Available = (LONG) pHeader->biClrUsed - StartIndex;
+    long Available = (long)pHeader->biClrUsed - StartIndex;
     *pRetrieved = std::max(0L, std::min(Available, Entries));
     if (*pRetrieved == 0) {
         return S_FALSE;
